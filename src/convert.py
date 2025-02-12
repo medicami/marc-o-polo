@@ -1,7 +1,7 @@
 import pymarc
 import os
 import csv
-
+from util import *
 
 """
 This class is dedicated to converting the information within a csv file into a marc file.
@@ -24,13 +24,75 @@ Input can be exactly as typed, but if wishing to use zero exclusive, offset by +
 
 
 Return:
-String -- the string which identifies the .csv file
+target -- the string which identifies the .csv file
 """
 def getCSV():
     relpath = "../../data/csv"
     abspath = os.path.join(__file__,relpath)
+    dir = os.listdir(abspath)
+    dir.sort()
+    target = ""
 
+    match(len(dir)):
+        case 0: #there is nothing in the directory
+            print("Unfortunately there's nothing in the data/csv folder.")
+            clear()
+            pass
+        case 1: #there is only one file in the directory
+            while True:
+                print("There's exactly one file available, "+dir[0]+", do you want to convert this?")
+                print("""
+                    [0] DO IT
+                    [1] NOPE""")
+                
+                try:
+                    choice = int(input("Enter a number: "))
+                except:
+                    print("Oh, maybe you didn't type a number?")
+                    clear()
+                    continue
+                if choice == 0:
+                    target = abspath+"/"+dir[0]
+                    print("Target file set: "+target)
+                    clear()
+                    return target
+                elif choice == 1:
+                    print("Let's skedaddle!")
+                    clear()
+                    break
+                else:
+                    print("Oh, that number wasn't an option.")
+                    clear()
+                
+        case _: #there are many files in the directory
+            while True:
+                dirSize = range(len(dir))
+                print("""
+                    Here are the files in data/csv, which one do you want to convert?
+                    """)
+                for i in dirSize:
+                    print("["+str(i)+"]"+" "+dir[i])
+
+                
+                choice = input("Enter a number corresponding to the thing you want (0 to "+str(len(dir)-1)+"): ")
+                if within(0,len(dir)-1,choice)==False:
+                    clear()
+                    continue
+                else:
+                    target = abspath+"/"+dir[int(choice)]
+                    print("Target file set: "+target)
+                    clear()
+                    return target
+
+"""
+Using a string to identify the target file, read the .csv file and strip the important information out.
+Put the information into a .marc file. Each row corresponding to a new record in the file."""
+def readCSV(target):
+    with open(target, newline='') as csvfile:
+        
+        pass
     pass
+            
 
 
 """

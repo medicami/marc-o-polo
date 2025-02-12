@@ -2,6 +2,8 @@ import pymarc
 import os
 import csv
 from compare import *
+from convert import *
+from util import *
 
 def main():
     
@@ -22,7 +24,9 @@ def main():
         match option:
             case 1:
                 print("This is the conversion option.")
-                
+                clear()
+                target = getCSV()
+                readCSV(target)
                 pass
             case 2:
                 print("This is the comparison option.")
@@ -41,28 +45,7 @@ def main():
         clear()
         continue
 
-def clear():
-    input("Press enter to continue.")
-    os.system('cls' if os.name == 'nt' else 'clear')
-    #thanks, https://stackoverflow.com/questions/2084508/clear-the-terminal-in-python
-    pass
 
-def validate():
-    """Requests an input and ensures it's a positive integer. Returns said integer."""
-
-    try:
-        value = int(input("GIMME NUMBER: "))
-
-    except:
-        print("THAT WASN'T A POSITIVE INTEGER.")
-        return
-
-    if(value <= 0):
-        print("NUMBER IS ZERO OR NEGATIVE.")
-        return
-
-    else:
-        return value
         
 def read_csv():
     """
@@ -107,3 +90,4 @@ def getFiles():
 
 
 
+main()
