@@ -1,4 +1,4 @@
-
+import re
 import os
 import csv
 from util import *
@@ -29,15 +29,20 @@ def getCSV():
 
     match(len(dir)):
         case 0: #there is nothing in the directory
-            print("Unfortunately there's nothing in the data/csv folder.")
+            print("""
+                  Unfortunately there's nothing in the data/csv folder.
+                  """)
             clear()
             pass
         case 1: #there is only one file in the directory
             while True:
-                print("There's exactly one file available, "+dir[0]+", do you want to convert this?")
+                print("""
+                      There's exactly one file available, "+dir[0]+", do you want to convert this?
+                      """)
                 print("""
                     [1] DO IT
-                    [2] NOPE""")
+                    [2] NOPE
+                      """)
                 
                 try:
                     choice = int(input("Enter a number: "))
@@ -82,7 +87,8 @@ def getCSV():
 Using a string to identify the target file, read the .csv file and strip the important information out.
 Put the information into a .marc file. Each row corresponding to a new record in the file."""
 def readCSV(target):
-    with open(target, newline='') as csvfile:
+
+    with open(target, 'r', newline='', errors='ignore') as csvfile:
         reader = csv.reader(csvfile, delimiter=',', quotechar='"')
         #It turns out that working with a csv.reader object is like working with a cactus that's on fire in a cloud of sulfuric acid. So let's just make it a list.
         readme = list(reader)
@@ -91,10 +97,11 @@ def readCSV(target):
         what our data is going to look like, but this would be something that would improve the usablility of the thing in a practical setting."""
         
         while True:
-            print("This is the first row of the data file:\n"+str(readme[0])+"\nDo you want to use this for a record?")
+            print("\nThis is the first row of the data file:\n"+str(readme[0])+"\nDo you want to use this for a record?\n")
             print("""
                 [1] YES
-                [2] NO""")
+                [2] NO
+                  """)
             choice = validate()
             match(choice):
                 case 1:
@@ -109,6 +116,7 @@ def readCSV(target):
                     pass
                 case _:
                     print("Uh, that wasn't one of the options.")
+                    clear()
                     continue
             break
         clear()
@@ -119,14 +127,16 @@ def readCSV(target):
         for i in readme[0]:
             os.system('cls' if os.name == 'nt' else 'clear')
             while True:
-                print("Please choose what this be in the MARC file: "+str(i)+".")
+                print("\nPlease choose what this will be in the MARC file: "+str(i)+".\n")
                 print("""
-                        [1] ISBN
-                        [2] TITLE
-                        [3] MAIN ENTRY
-                        [4] DON'T USE""")
+                        [1] ISBN (020)
+                        [2] TITLE (245)
+                        [3] MAIN ENTRY (100)
+                        [4] LOCAL FIELD (900)
+                        [5] DON'T USE
+                      """)
                 choice = validate()
-                if within(1,4,choice)==False:
+                if within(1,5,choice)==False:
                     print("Please try that again.")
                     clear()
                     continue
@@ -141,48 +151,66 @@ def readCSV(target):
         relpath = "../../data/marc/"+str(name)+".mrc"
         #Note to self, I'm aware that certain characters are not allowed for file names, I don't know how this will handle it.
         abspath = os.path.join(__file__, relpath)
-        with open(abspath, 'ab') as marc:
+        with open(abspath, 'wb') as marc:
             for row in readme:
-
+                #This iterates once for each row in the CSV
                 record = Record()
                 for i in range(0,len(fieldPat)-1):
+                    #This iterates once for each column in the row
+
+                    v = re.sub("\(.*", "", str(row[i]))
+                    #For some reason, this is an invalid escape sequence. But it still prints fine...
+
                     match(fieldPat[i]):
                         case 1:
                             #ISBN
-                            record.add_field(
+                            record.add_ordered_field(
                                 Field(
                                     tag = '020',
                                     indicators = Indicators('/','/'),
-                                    subfields = [Subfield(code='a', value=row[i])]
+                                    subfields = [Subfield(code='a', value=v)]
                                 )
                             )
                             pass
                         case 2:
                             #TITLE
-                            record.add_field(
+                            record.add_ordered_field(
                                 Field(
                                     tag = '245',
                                     indicators = Indicators('/','/'),
-                                    subfields = [Subfield(code='a', value=row[i])]
+                                    subfields = [Subfield(code='a', value=v.capitalize())]
                                 )
                             )
                             pass
                         case 3:
                             #MAIN ENT
-                            record.add_field(
+                            record.add_ordered_field(
                                 Field(
                                     tag = '100',
                                     indicators = Indicators('/','/'),
-                                    subfields = [Subfield(code='a', value=row[i])]
+                                    subfields = [Subfield(code='a', value=v.title())]
+                                    
                                 )
                             )
                             pass
                         case 4:
-                            #SKIP THIS
+                            #LOCAL FIELD
+                            record.add_ordered_field(
+                                Field(
+                                    tag = '900',
+                                    indicators = Indicators('/','/'),
+                                    subfields = [Subfield(code='a', value=v.upper())]
+                                    
+                                )
+                            )
+                            pass
+                        case 5:
                             pass
 
-                    marc.write(record.as_marc())
-                    pass
+                marc.write(record.as_marc())
+    print("If this prints, the file was successfully created at: "+str(os.path.relpath(abspath)))
+    print("Note: this program will not recognize proper nouns in titles. Be sure to check the output!")
+#End of function
 
 
 

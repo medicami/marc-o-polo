@@ -12,8 +12,11 @@ def clear():
     #thanks, https://stackoverflow.com/questions/2084508/clear-the-terminal-in-python
     pass
 
+"""
+Requests an input and ensures it's a positive integer. Returns said integer.
+Basically just the input() funciton but with validation built in.
+"""
 def validate():
-    """Requests an input and ensures it's a positive integer. Returns said integer."""
 
     try:
         value = int(input("GIMME NUMBER: "))
@@ -30,7 +33,9 @@ def validate():
         return value
     
 
-"""Takes a value and checks if its within the range of values. Used in menus. Inclusive.
+"""
+Takes a value and checks if its within the range of values. Used in menus.
+Note: the range is inclusive, i.e., if you specify a floor of 1, ceiling of 4, 1 and 4 will be valid.
 
 Args:
 floor -- The lower value not to be below.

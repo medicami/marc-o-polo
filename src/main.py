@@ -1,4 +1,3 @@
-import pymarc
 import os
 import csv
 from compare import *
@@ -30,7 +29,7 @@ def main():
                 pass
             case 2:
                 print("This is the comparison option.")
-                
+                print("This currently does nothing.")
                 pass
             case 3:
                 print("PECK")
@@ -46,7 +45,7 @@ def main():
         continue
 
 
-"""*** Note, most of the functions from here are just test functions for practice. ***"""
+"""*** Note, the functions from here are just test functions for practice. ***"""
 
 def read_csv():
     """
@@ -62,7 +61,7 @@ def read_csv():
     print(os.path.join(__file__, relpath))
     abspath = os.path.join(__file__, relpath)
     print(abspath)
-    with open(abspath, newline='') as csvfile:
+    with open(abspath, newline='', errors='ignore') as csvfile:
             read = csv.reader(csvfile, delimiter=',', quotechar='*')
             for thing in read:
                 print("!".join(thing))
@@ -89,6 +88,5 @@ def getFiles():
 
     pass
 
-
-
 main()
+#LET'S REV UP THOSE FRYERS!

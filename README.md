@@ -30,5 +30,18 @@ CSV is a format that has been used for a very long time but has essentially no s
 
 Pymarc is a module created by many people and can be found here https://gitlab.com/pymarc/pymarc. Pymarc will (hopefully) allow us to read from marc files and write to them. The main uses of this will be: writing to a marc file using data extracted from a csv, reading from a marc file and placing its information into a list, comparing the data from the csv marc to another marc file and identifying which ones exist in both (likely using ISBN). While it would be easier to just predict what fields/subfields each piece of the csv file should go into, it would be nice to allow the user to specify where each thing should go. Tags, field codes, and indicators are all strings, so substituting these with variables should be easy, it will just be annoying to apply verification to them to prevent issues.
 
-#WTF Game Plan?
-##READING FROM CSV
+#Converting from CSV to MARC
+The program is currently in a state where it is able to convert CSV files to MARC. It is undoubtedly very primitive in how it does this, basically reading the rows from the CSV and turning it into text to throw into the MARC file: it does not do much validation on the finished output to determine if there are mistakes or anything like that.
+
+CSV files are to be put into the data/csv folder. Output files will be placed in the data/marc folder. There is currently some limitations on where you can specify each field will go; the program will, in fact, ask you where each field in the row should go in the MARC file (it only asks for the first row) and then applies this to the entire file. I'm impressed at how fast it can go considering the test file is over four thousand rows long, but I guess computers are just magical like that.
+
+Current foreseeable improvements: there is no validation for the name you put in for the name of the MARC file, which means that it will indescriminately overwrite things and will probably explode if you attempt to use illegal characters for filenames. It would also be nice for the user to be able to specify what the indicators and sub-fields could be, the question is mostly where would this be stored.
+
+#Comparing .mrc Files
+One feature of the program that is tentatively being developed is the ability to compare two different .mrc files. The most instinctive idea would be to compare just the ISBNs, which is pretty simple since they're unique by design.
+
+There is a utility included in MarcEdit called MarcCompare (who would've thought) by the late Robert Ellett that can perform a similar function, but the issue with it is that it can't do anything with the files after being compared. The goal we have would be to allow the user to use the barebones MARC file that comes from the CSV to determine if existing, fuller records exist in a master file. Then we could take these and make a new working file for the cataloguers to work with.
+
+The only issue with this functionality would be matching the order for the cataloged books with the record: cataloging at ULS is done basically in whatever order the cataloguer works in. The books come in completely unarranged, but however they exit the cataloguers hands (which should be the same as how they were entered into the file) is the same order the processors have to follow, presumably for the sake of efficiency.
+
+The plan right now would be to grab all of the ISBNs from a target file, then compare them to the master file. Record objects do allow you to grab specific fields, so after grabbing one ISBN, we iterate through the entire list for the master file. When we find the record we need, write it to a new one and break the loop, move onto the next record. Easy on paper, we'll see how it works in practice.
