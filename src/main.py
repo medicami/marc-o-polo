@@ -46,7 +46,8 @@ def main():
         continue
 
 
-        
+"""*** Note, most of the functions from here are just test functions for practice. ***"""
+
 def read_csv():
     """
     Receives a path to a .csv file and opens it, separating and storing its data.

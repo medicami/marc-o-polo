@@ -30,7 +30,7 @@ def validate():
         return value
     
 
-"""Takes a value and checks if its within the range of values. Used in menus.
+"""Takes a value and checks if its within the range of values. Used in menus. Inclusive.
 
 Args:
 floor -- The lower value not to be below.
