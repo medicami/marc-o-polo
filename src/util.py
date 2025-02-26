@@ -23,14 +23,33 @@ def validate():
 
     except:
         print("THAT WASN'T A POSITIVE INTEGER.")
-        return
+        return False
 
     if(value <= 0):
         print("NUMBER IS ZERO OR NEGATIVE.")
-        return
+        return False
 
     else:
         return value
+    
+
+"""
+
+"""
+def validateSubField():
+    try:
+        sub = str(input("GIMME LETTER: "))
+    except:
+        print("If you're reading this, you somehow threw an exception.")
+        return False
+    if sub.isalpha()==False:
+        print("NOT A LETTER.")
+        return False
+    elif len(sub)==1:
+        return sub
+    else:
+        print("TOO LONG OR SHORT")
+        return False
     
 
 """

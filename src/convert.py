@@ -122,27 +122,71 @@ def readCSV(target):
         clear()
 
         #Now we need to determine the pattern for what each column will be.
-        fieldPat = []
+        usePat = [] #Store True or False if a column is going to be used or ignored, True if yes, False if no.
+        fieldPat = [] #Store the string representing the field code for this column, e.g., 100, 245. 020
+        subfieldPat = [] #Store the string representing the subfield for this column, e.g., a, b, d, p
 
         for i in readme[0]:
             os.system('cls' if os.name == 'nt' else 'clear')
             while True:
-                print("\nPlease choose what this will be in the MARC file: "+str(i)+".\n")
+                print("\nDo you want to include this in the MARC file: [ "+str(i)+" ] ?\n")
                 print("""
-                        [1] ISBN (020)
-                        [2] TITLE (245)
-                        [3] MAIN ENTRY (100)
-                        [4] LOCAL FIELD (900)
-                        [5] DON'T USE
+                        [1] YES
+                        [2] NO
                       """)
                 choice = validate()
-                if within(1,5,choice)==False:
+                if choice == False:
+                    continue
+                elif within(1,2,choice)==False:
                     print("Please try that again.")
                     clear()
                     continue
+                elif choice==1:
+                    usePat.append(True)
+                    clear()
+
+                    while True:
+                        print("Please specify what FIELD CODE this [ "+str(i)+" ] will go into, e.g., 020, 100, 245, etc.")
+                        print("""
+                              Common fields:
+                              20 = ISBN
+                              100 = MAIN ENTRY
+                              245 = TITLE
+                              """)
+                        field = validate()
+                        if field == False:
+                            continue
+                        elif within(1,999,field)==False:
+                            print("Oops, your number ("+str(field)+") is probably not a field code.")
+                            clear()
+                            continue
+                        else:
+                            fieldPat.append(field)
+                            break
+                    clear()
+
+                    while True:
+                        print("Field code: "+str(field))
+                        print("Please specify what SUBFIELD this [ "+str(i)+" ] will go into, e.g., a, b, c, etc.")
+                        
+                        sub = validateSubField()
+                        if sub == False:
+                            clear()
+                            continue
+                        else:
+                            subfieldPat.append(sub)
+                            break
+                    clear()
+                    
+
                 else:
-                    fieldPat.append(choice)
-                    break
+                    usePat.append(False)
+                    fieldPat.append(None)
+                    subfieldPat.append(None)
+                    pass
+                
+                #End of while
+                break
 
 
         #It's finally time to start using Pymarc. We have the rows and the patterns they will follow, so now we just have to make the records column by column.
@@ -152,15 +196,65 @@ def readCSV(target):
         #Note to self, I'm aware that certain characters are not allowed for file names, I don't know how this will handle it.
         abspath = os.path.join(__file__, relpath)
         with open(abspath, 'wb') as marc:
+
             for row in readme:
                 #This iterates once for each row in the CSV
                 record = Record()
-                for i in range(0,len(fieldPat)-1):
-                    #This iterates once for each column in the row
 
-                    v = re.sub("\(.*", "", str(row[i]))
+                for i in range(0,len(usePat)-1):
+                    #This iterates once for each column in the row (0 to the length of the pattern list minus 1)
+
+                    v = re.sub("\(.*", "", str(row[i])).strip()
+                    
+
                     #For some reason, this is an invalid escape sequence. But it still prints fine...
+                    if usePat[i]==True:
 
+                        match fieldPat[i]:
+                            case '100':
+                                #Main entry is title case
+                                v = v.title()
+                                pass
+                            case '245':
+                                #Titles are sentence case
+                                v = v.capitalize()
+                                pass
+                            case _:
+                                v = v.upper() #probably redundant but why not
+                                pass
+
+                        if record.get(str(fieldPat[i]))==None:
+                            record.add_ordered_field(
+                                Field(
+                                        tag = str(fieldPat[i]),
+                                        indicators = Indicators(' ',' '),
+                                        subfields = [Subfield(code=str(subfieldPat[i]), value=v)]
+                                    )
+                            )
+                        else:
+                            """
+                            I had intended to format subfields intended for prices to force 2 decimal places,
+                            as it was when I catalogued at ULS, but evidently this is just way too specific.
+
+                            if v.isdigit():
+                            v = str(f'{float(v):.2f}')
+                            pass
+                            """
+
+                            record.get(str(fieldPat[i])).add_subfield(
+                                str(subfieldPat[i]), v
+                            )
+                        
+                    else:
+                        #do nothing
+                        pass
+                #For ends here
+
+                marc.write(record.as_marc())
+            #For ends here
+    print("If this prints, the file was successfully created at: "+str(os.path.relpath(abspath)))
+    print("Note: this program will not do the following:\nRecognize proper nouns\nAdd indicators\nDo nearly any error checking\n\nPlease verify the output!")
+    """ OLD SOLUTION
                     match(fieldPat[i]):
                         case 1:
                             #ISBN
@@ -206,10 +300,8 @@ def readCSV(target):
                             pass
                         case 5:
                             pass
-
-                marc.write(record.as_marc())
-    print("If this prints, the file was successfully created at: "+str(os.path.relpath(abspath)))
-    print("Note: this program will not recognize proper nouns in titles. Be sure to check the output!")
+                        """
+                    
 #End of function
 
 
