@@ -6,8 +6,9 @@ This class contains functions used in the other classes.
 """
 Clears the screen after asking the user to press enter.
 """
-def clear():
-    input("Press enter to continue.")
+def clear(skip=False):
+    if skip==False or None:
+        input("Press enter to continue.")
     os.system('cls' if os.name == 'nt' else 'clear')
     #thanks, https://stackoverflow.com/questions/2084508/clear-the-terminal-in-python
     pass
@@ -34,7 +35,7 @@ def validate():
     
 
 """
-
+Essentially the same thing as validate, but for strings. Is used to get a one letter string for picking subfields for Marc.
 """
 def validateSubField():
     try:
@@ -81,4 +82,43 @@ def within(floor, ceil, val):
     else:
         return True
 
+    
+def joke():
+    joke = """
+                       ┼                                    
+                       ┼┼                                   
+                       ┼┼┼                   ((((((         
+                         ┼┼┼                  ))))))        
+                       ┼┼┼  ┼┼┼┼┼            ((((((         
+                 ┼┼┼┼┼┼┼         ┼┼┼┼ ┼       ))))))        
+              ┼┼┼┼                     ┼┼┼┼┼                
+            ┼┼                  **         ┼┼┼┼             
+           ┼┼   *    * │┼         *****       ┼┼┼           
+          ┼┼ ***       ┼┼│                      ┼┼┼         
+         ┼┼  *        ┼┼┼┼││              ***    ┼┼┼        
+         ┼     ┼      ┼││ ┼┼││           ┼         ┼        
+        ┼┼    ┼┼    │┼┼    ┼┼┼┼││         ┼        *┼       
+       ┼┼     ┼    ┼┼┼│       ┼┼┼┼┼│      ┼┼       **┼      
+      ┼┼    ┼┼┼ ┼┼┼▲▲▲▲▲▲         ▲▲▲▲▲┼││  ┼    ─* **┼     
+    ┬┬┼  ┌┼┼│┼┼┼┼ ________        _____┼┼┼┼┼┼┼ │   ┌│┼┼┼┼┼┼ 
+ ┼┼┼┼┬┬┼┼┼┼│┼    ^^^^^^$$$       ^^^^$$$^^^ ┼┼┼│   ┼┼       
+       ┼┼*│││   ^      $$$           $$$   ^  │││   ┼┼      
+       ┼│││││  ^       $$$   .       $$$    ^ ││││││ ┼┼     
+      ┼┼││││││ ^___    $$$           $$$    ^ ┼││││││┼┼┼    
+    ┼┼┼┼│││││ ..::./     .  │  .      :.:::/:┼┼│││││┬┼┼┼┼┼┼┼
+┼┼┼┼┼┼┼┼┼││││  .::::   .   ││    .   ::::./ ┼┼│││││││       
+       ┼┼││││@    .                   .    ┼│││┼│││││       
+      ┼┼┼│││││@                          │┼││ @│││││┼       
+      ┼┼│││││││@@@        _______       ┼    @@┼│││││┼      
+    ┼┼┼┼││││││││││@@@@                    @@@│││││││││┼     
+    ┼┼┼││││││││││││││@@@@              @@@││││││││││││┼     
+    ┼┼┼││││││││││││││││││@@###   ####@│││││││││││││││┼┼     
+     ┼┼│││││││││││││││││││@@       @@@│││││││││││││││┼┼     
+     ┼┼┼│││││││││││││▼▼▼▼▼▼@       @#▼▼▼▼▼▼│││││││││││┼     
+      ┼┼│││││││▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼┼│││┬┼┼      
+      ┼┼┼│││││▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼┼┼┼┼SIGH   
+"""
+    print(joke)
+    #"raughs"
+    return
     

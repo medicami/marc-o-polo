@@ -7,6 +7,7 @@ from util import *
 def main():
     
     while True:
+        
         print(
             #it turns out when they said triple quotations were literal strings, they weren't kidding.
             """
@@ -23,18 +24,29 @@ def main():
         match option:
             case 1:
                 print("This is the conversion option.")
-                clear()
+                clear(False)
                 target = getCSV()
-                readCSV(target)
+                if target != None:
+                    readCSV(target)
+
                 pass
             case 2:
                 print("This is the comparison option.")
-                print("This currently does nothing.")
+                clear(False)
+                message = "target marc file (to be compared to master)"
+                targetMarc = getMarc(message)
+                message = "master marc file (to compare against)"
+                targetMaster = getMarc(message)
+
+                compare(targetMarc, targetMaster)
+
                 pass
             case 3:
                 print("PECK")
                 clear()
                 break
+            case 84:
+                joke()
             case _:
                 pass
                 

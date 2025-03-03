@@ -33,11 +33,11 @@ def getCSV():
                   Unfortunately there's nothing in the data/csv folder.
                   """)
             clear()
-            pass
+            return None
         case 1: #there is only one file in the directory
             while True:
                 print("""
-                      There's exactly one file available, "+dir[0]+", do you want to convert this?
+                      There's exactly one file available, "+dir[0]+", do you want to use this?
                       """)
                 print("""
                     [1] DO IT
@@ -67,7 +67,7 @@ def getCSV():
             while True:
                 dirSize = range(len(dir))
                 print("""
-                    Here are the files in data/csv, which one do you want to convert?
+                    Here are the files in data/csv, which one do you want to use?
                     """)
                 for i in dirSize:
                     print("["+str(i)+"]"+" "+dir[i])
@@ -129,7 +129,7 @@ def readCSV(target):
         for i in readme[0]:
             os.system('cls' if os.name == 'nt' else 'clear')
             while True:
-                print("\nDo you want to include this in the MARC file: [ "+str(i)+" ] ?\n")
+                print(f"\nDo you want to include this in the MARC file: [ {str(i)} ] ?\n")
                 print("""
                         [1] YES
                         [2] NO
@@ -143,21 +143,16 @@ def readCSV(target):
                     continue
                 elif choice==1:
                     usePat.append(True)
-                    clear()
+                    clear(True)
 
                     while True:
-                        print("Please specify what FIELD CODE this [ "+str(i)+" ] will go into, e.g., 020, 100, 245, etc.")
-                        print("""
-                              Common fields:
-                              20 = ISBN
-                              100 = MAIN ENTRY
-                              245 = TITLE
-                              """)
+                        print(f"Please specify what FIELD CODE this [ {str(i)} ] will go into, e.g., 020, 100, 245, etc.")
+                        
                         field = validate()
                         if field == False:
                             continue
                         elif within(1,999,field)==False:
-                            print("Oops, your number ("+str(field)+") is probably not a field code.")
+                            print(f"Oops, your number ( {str(field)} ) is probably not a field code.")
                             clear()
                             continue
                         else:
@@ -167,7 +162,7 @@ def readCSV(target):
 
                     while True:
                         print("Field code: "+str(field))
-                        print("Please specify what SUBFIELD this [ "+str(i)+" ] will go into, e.g., a, b, c, etc.")
+                        print(f"Please specify what SUBFIELD this [ {str(i)} ] will go into, e.g., a, b, c, etc.")
                         
                         sub = validateSubField()
                         if sub == False:
@@ -176,7 +171,7 @@ def readCSV(target):
                         else:
                             subfieldPat.append(sub)
                             break
-                    clear()
+                    clear(True)
                     
 
                 else:
@@ -190,7 +185,8 @@ def readCSV(target):
 
 
         #It's finally time to start using Pymarc. We have the rows and the patterns they will follow, so now we just have to make the records column by column.
-        clear()
+        
+        
         name = input("Please give the new MARC file a name (no extension): ")
         relpath = "../../data/marc/"+str(name)+".mrc"
         #Note to self, I'm aware that certain characters are not allowed for file names, I don't know how this will handle it.
@@ -201,11 +197,11 @@ def readCSV(target):
                 #This iterates once for each row in the CSV
                 record = Record()
 
-                for i in range(0,len(usePat)-1):
+                for i in range(0,len(usePat)):
                     #This iterates once for each column in the row (0 to the length of the pattern list minus 1)
 
                     v = re.sub("\(.*", "", str(row[i])).strip()
-                    
+                    print(i)
 
                     #For some reason, this is an invalid escape sequence. But it still prints fine...
                     if usePat[i]==True:
@@ -252,8 +248,10 @@ def readCSV(target):
 
                 marc.write(record.as_marc())
             #For ends here
+
+    print(f"debug\n{usePat}\n{fieldPat}\n{subfieldPat}\n")
     print("If this prints, the file was successfully created at: "+str(os.path.relpath(abspath)))
-    print("Note: this program will not do the following:\nRecognize proper nouns\nAdd indicators\nDo nearly any error checking\n\nPlease verify the output!")
+    print("Note: this program will not do the following:\n\nRecognize proper nouns.\nAdd indicators.\nDo almost any error checking.\n\nPlease verify the output!\n")
     """ OLD SOLUTION
                     match(fieldPat[i]):
                         case 1:
