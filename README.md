@@ -1,6 +1,19 @@
 # marc-o-polo
 A small project to convert Linux datafiles containing bilbiographic data into MaRC files or other usable formats.
 
+# I Don't Care About All This, How Do I Use the Program?
+This is a Python program, so please install Python 3.
+
+You will also need pymarc. To install it, copy this into your terminal:
+
+py -m pip install pymarc
+
+To run through the terminal, simply type "py " and then the location of the "main.py" file. On Windows, you can drag the file from the file explorer into the terminal and it will print the path to the file for you, 
+
+e.g., "py C:\Stuff\marc-o-polo\src\main.py"
+
+An easy way to do this on Windows is to Shift+Right-Click in the empty space in the file explorer and select "Open Powershell window here", then you can start typing the name of the file to run, press tab, and it will automatically complete the relative path for the file.
+
 ## The Problem
 When books are received, information about them comes in a datafile on a Linux server. The file itself is essentially unusable for the cataloguers and other staff, who typically do their work on Windows machines. In order to convert this information into a usable formate for the other staff to use, information for individual books is printed out onto receipts and placed inside of the items for future processing.
 
@@ -21,7 +34,7 @@ The practicality of this project hinges on whether or not any common programming
 
 Any actual code is to be here: https://github.com/medicami/marc-o-polo
 
-# "Literature" Review
+## "Literature" Review
 Python is the language of choice for this project. The main reason being is that it's new and shiny and cool. On a more serious note, it is a relatively modern language with support for lots of additional functionality created by other people through modules. Python is more optimized than a language like Java, but a lot more intuitive and easy to learn compared to C++. It's also just different from what I learned with (Java), so this is a good learning opportunity.
 
 If you have literally no experience with object oriented coding, I will attempt to explain plainly. We write code to give instructions to the computer. When you have some task you want to do many times, instead of rewriting that code every time you need it, we make a function with code in it, and then write the name of the function to "call" it. Calling the function essentially tells the computer to go over to that function and run the code inside of it. Other people have written code into functions and let other people use them, in Python these are called modules. The modules this project relies on most are the "csv" and "pymarc" modules.
@@ -30,7 +43,7 @@ CSV is a format that has been used for a very long time but has essentially no s
 
 Pymarc is a module created by many people and can be found here https://gitlab.com/pymarc/pymarc. Pymarc will (hopefully) allow us to read from marc files and write to them. The main uses of this will be: writing to a marc file using data extracted from a csv, reading from a marc file and placing its information into a list, comparing the data from the csv marc to another marc file and identifying which ones exist in both (likely using ISBN). While it would be easier to just predict what fields/subfields each piece of the csv file should go into, it would be nice to allow the user to specify where each thing should go. Tags, field codes, and indicators are all strings, so substituting these with variables should be easy, it will just be annoying to apply verification to them to prevent issues.
 
-# Converting from CSV to MARC
+## Converting from CSV to MARC
 The program is currently in a state where it is able to convert CSV files to MARC. It is undoubtedly very primitive in how it does this, basically reading the rows from the CSV and turning it into text to throw into the MARC file: it does not do much validation on the finished output to determine if there are mistakes or anything like that.
 
 CSV files are to be put into the data/csv folder. Output files will be placed in the data/marc folder. There is currently some limitations on where you can specify each field will go; the program will, in fact, ask you where each field in the row should go in the MARC file (it only asks for the first row) and then applies this to the entire file. I'm impressed at how fast it can go considering the test file is over four thousand rows long, but I guess computers are just magical like that.
@@ -39,7 +52,7 @@ Current foreseeable improvements: there is no validation for the name you put in
 
 After some additional effort, the program now asks the user for each field they want to use the code and subfield code. It would totally be possible to allow the user to specify indicators, except indicators vary for each field which would be incompatible for this tool meant to process an extremely large number of records quickly. You'd have to specify the indicators for every title and such, which wouldn't be fast at all. Additionally, I would have liked to format price numbers to two decimal places, but this would require asking the user every time a field is entered what kind of formatting they want or assuming a certain field/subfield combination is a price. I think the most practical way you would implement this is to ask the user in a different part of the program to set a specific field/subfield combo to be prices, then apply this when this combination occurs in the record. It's certainly feasible to have global settings like that, but I have other priorities right now.
 
-# Comparing .mrc Files
+## Comparing .mrc Files
 One feature of the program that is tentatively being developed is the ability to compare two different .mrc files. The most instinctive idea would be to compare just the ISBNs, which is pretty simple since they're unique by design.
 
 There is a utility included in MarcEdit called MarcCompare (who would've thought) by the late Robert Ellett that can perform a similar function, but the issue with it is that it can't do anything with the files after being compared. The goal we have would be to allow the user to use the barebones MARC file that comes from the CSV to determine if existing, fuller records exist in a master file. Then we could take these and make a new working file for the cataloguers to work with.
@@ -47,3 +60,6 @@ There is a utility included in MarcEdit called MarcCompare (who would've thought
 The only issue with this functionality would be matching the order for the cataloged books with the record: cataloging at ULS is done basically in whatever order the cataloguer works in. The books come in completely unarranged, but however they exit the cataloguers hands (which should be the same as how they were entered into the file) is the same order the processors have to follow, presumably for the sake of efficiency.
 
 The plan right now would be to grab all of the ISBNs from a target file, then compare them to the master file. Record objects do allow you to grab specific fields, so after grabbing one ISBN, we iterate through the entire list for the master file. When we find the record we need, write it to a new one and break the loop, move onto the next record. Easy on paper, we'll see how it works in practice.
+
+After some time it turns out that it's pretty easy to compare two things. Not that I really should be surprised since nested loops were pretty much made for this sort of thing. As far as I know, with this feature done the program is effectively completed. Sure, there's a lot more that could be added or improved upon, especially the interface method, but for all I really care about, this is pretty much done. Shoutouts to ASCIIFlow which I used to make the joke.
+

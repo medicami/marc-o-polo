@@ -23,7 +23,7 @@ target -- the string which identifies the .csv file
 def getCSV():
     relpath = "../../data/csv"
     abspath = os.path.join(__file__,relpath)
-    dir = os.listdir(abspath)
+    dir = os.listdir(os.path.relpath(abspath))
     dir.sort()
     target = ""
 
