@@ -43,11 +43,10 @@ def main():
                 message = "master marc file (to compare against)."
                 targetMaster = getMarc(message)
                 '''
-                print("Please choose the MARC file you want to compare using (your master file)")
-                targetMaster = askopenfilename(title="Please choose the MARC file you want to compare using (master file).",filetypes=[("MARC files", "*.mrc")])
-                print("Please choose the MARC file you want to compare using (your master file)")
+                print("Please choose the target file (the one you are comparing to the master.)")
                 targetMarc = askopenfilename(title="Please choose the MARC file you want to compare against (testing file).",filetypes=[("MARC files", "*.mrc")])
-
+                print("Please choose the master file (the one that matches will be copied from into a new file.)")
+                targetMaster = askopenfilename(title="Please choose the MARC file you want to compare using (master file).",filetypes=[("MARC files", "*.mrc")])
 
                 compare(targetMarc, targetMaster)
 

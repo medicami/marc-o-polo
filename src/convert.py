@@ -139,7 +139,7 @@ def readCSV(target):
                     continue
             clear()
             break
-        clear()
+        
 
         #Now we need to determine the pattern for what each column will be.
         usePat = [] #Store True or False if a column is going to be used or ignored, True if yes, False if no.
@@ -180,7 +180,7 @@ def readCSV(target):
                         else:
                             fieldPat.append(field)
                             break
-                    clear()
+                    clear(True)
 
                     while True:
                         print("Field code: "+str(field))
@@ -224,7 +224,6 @@ def readCSV(target):
                     #This iterates once for each column in the row (0 to the length of the pattern list minus 1)
 
                     v = re.sub("\(.*", "", str(row[i])).strip()
-                    print(i)
 
                     #For some reason, this is an invalid escape sequence. But it still prints fine...
                     if usePat[i]==True:
@@ -272,7 +271,6 @@ def readCSV(target):
                 marc.write(record.as_marc())
             #For ends here
 
-    print(f"debug\n{usePat}\n{fieldPat}\n{subfieldPat}\n")
     print(f"If this prints, the file was successfully created at: {name}")
     print("Note: this program will not do the following:\n\nRecognize proper nouns.\nAdd indicators.\nDo almost any error checking.\n\nPlease verify the output!\n")
     """ OLD SOLUTION
