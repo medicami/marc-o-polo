@@ -2,7 +2,8 @@ from pymarc import *
 import os
 import re
 from util import *
-from convert import getCSV
+#from convert import getCSV
+from tkinter.filedialog import *
 
 """
 This part of the program will read from two different marc records, one is a master file and one is a comparison file.
@@ -27,9 +28,9 @@ def compare(first, second):
     reader1 = MARCReader(open(first, 'rb'))
     reader2 = MARCReader(open(second, 'rb'))
 
-    name = input("Please give the new MARC file a name (no extension): ")
-    relpath = "../../data/marc/"+str(name)+".mrc"
-    abspath = os.path.join(__file__, relpath)
+    name = asksaveasfilename(title="Please choose where to save the new MARC file.", defaultextension=".mrc", filetypes={("MARC file", "*.mrc")})
+    #relpath = "../../data/marc/"+str(name)+".mrc"
+    #abspath = os.path.relpath(os.path.join(__file__, relpath))
     
 
     firstMatch = False
@@ -38,7 +39,7 @@ def compare(first, second):
         for thing2 in reader2:
 
             if thing2.isbn == thing1.isbn and firstMatch == False:
-                writeMe = open(abspath, 'wb')
+                writeMe = open(name, 'wb')
                 firstMatch = True
 
             if thing2.isbn == thing1.isbn:
@@ -52,6 +53,7 @@ def compare(first, second):
     reader2.close()
     if firstMatch == True:
         writeMe.close()
+        print(f"If this printed, then all ended well.")
     else:
         print(f"If this printed, then no match was found between the two files, {os.path.relpath(first)} and {os.path.relpath(second)}.")
     pass
@@ -60,6 +62,7 @@ def compare(first, second):
 Essentially a copy of getCSV from the convert file, but with the data/marc folder as the target. Additionally, this takes an argument
 which should be a string to be printed on the screen to let the user know what thing they are picking.
 """
+'''
 def getMarc(message):
     relpath = "../../data/marc"
     abspath = os.path.join(__file__,relpath)
@@ -97,3 +100,4 @@ def getMarc(message):
                     return target
             pass
     pass
+'''

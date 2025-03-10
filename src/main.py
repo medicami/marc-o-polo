@@ -1,11 +1,15 @@
 import os
 import csv
+import tkinter as tk
+from tkinter.filedialog import *
 from compare import *
 from convert import *
 from util import *
 
 def main():
-    
+    window = tk.Tk()
+    window.attributes('-topmost', 1)
+    window.withdraw()
     while True:
         
         print(
@@ -25,7 +29,7 @@ def main():
             case 1:
                 print("This is the conversion option.")
                 clear(False)
-                target = getCSV()
+                target = coolerGetCSV()
                 if target != None:
                     readCSV(target)
 
@@ -33,17 +37,23 @@ def main():
             case 2:
                 print("This is the comparison option.")
                 clear(False)
-                message = "target marc file (to be compared to master)"
+                '''
+                message = "target marc file (to be compared to master)."
                 targetMarc = getMarc(message)
-                message = "master marc file (to compare against)"
+                message = "master marc file (to compare against)."
                 targetMaster = getMarc(message)
+                '''
+                print("Please choose the MARC file you want to compare using (your master file)")
+                targetMaster = askopenfilename(title="Please choose the MARC file you want to compare using (master file).",filetypes=[("MARC files", "*.mrc")])
+                print("Please choose the MARC file you want to compare using (your master file)")
+                targetMarc = askopenfilename(title="Please choose the MARC file you want to compare against (testing file).",filetypes=[("MARC files", "*.mrc")])
+
 
                 compare(targetMarc, targetMaster)
 
                 pass
             case 3:
-                print("PECK")
-                clear()
+                peck()
                 break
             case 84:
                 joke()

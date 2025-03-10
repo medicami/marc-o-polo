@@ -1,6 +1,7 @@
 import re
 import os
 import csv
+from tkinter.filedialog import *
 from util import *
 from pymarc import Record, Field, Subfield, Indicators
 
@@ -20,12 +21,15 @@ Input can be exactly as typed, but if wishing to use zero exclusive, offset by +
 Return:
 target -- the string which identifies the .csv file
 """
+'''
 def getCSV():
+    
     relpath = "../../data/csv"
     abspath = os.path.join(__file__,relpath)
-    dir = os.listdir(os.path.relpath(abspath))
+    dir = os.listdir(abspath)
     dir.sort()
     target = ""
+    print(abspath)
 
     match(len(dir)):
         case 0: #there is nothing in the directory
@@ -82,7 +86,23 @@ def getCSV():
                     print("Target file set: "+target)
                     clear()
                     return target
+'''
 
+"""
+wtf I wish someone told me tkinter could do this AND do it this easily.
+"""
+def coolerGetCSV():
+    print("Please chooes the CSV file you want to convert.")
+    target = askopenfilename(title="Please choose the CSV file you want to convert.", filetypes=[("CSV files", "*.csv")])
+    #how was I supposed to know that strings work as booleans? Especially because doing target!=False DIDN'T WORK
+    if (target):
+        print(f"Target file set: {target}.")
+        clear()
+        return target
+    else:
+        return None
+    
+    
 """
 Using a string to identify the target file, read the .csv file and strip the important information out.
 Put the information into a .marc file. Each row corresponding to a new record in the file."""
@@ -97,7 +117,7 @@ def readCSV(target):
         what our data is going to look like, but this would be something that would improve the usablility of the thing in a practical setting."""
         
         while True:
-            print("\nThis is the first row of the data file:\n"+str(readme[0])+"\nDo you want to use this for a record?\n")
+            print(f"\nThis is the first row of the data file:\n{readme[0]}\nDo you want to use this for a record?\n")
             print("""
                 [1] YES
                 [2] NO
@@ -115,9 +135,9 @@ def readCSV(target):
                     
                     pass
                 case _:
-                    print("Uh, that wasn't one of the options.")
-                    clear()
+                    clear(True)
                     continue
+            clear()
             break
         clear()
 
@@ -136,6 +156,7 @@ def readCSV(target):
                       """)
                 choice = validate()
                 if choice == False:
+                    clear(True)
                     continue
                 elif within(1,2,choice)==False:
                     print("Please try that again.")
@@ -150,6 +171,7 @@ def readCSV(target):
                         
                         field = validate()
                         if field == False:
+                            clear(True)
                             continue
                         elif within(1,999,field)==False:
                             print(f"Oops, your number ( {str(field)} ) is probably not a field code.")
@@ -166,7 +188,7 @@ def readCSV(target):
                         
                         sub = validateSubField()
                         if sub == False:
-                            clear()
+                            clear(True)
                             continue
                         else:
                             subfieldPat.append(sub)
@@ -187,11 +209,12 @@ def readCSV(target):
         #It's finally time to start using Pymarc. We have the rows and the patterns they will follow, so now we just have to make the records column by column.
         
         
-        name = input("Please give the new MARC file a name (no extension): ")
-        relpath = "../../data/marc/"+str(name)+".mrc"
+        name = asksaveasfilename(title="Please choose where to save the new MARC file.",defaultextension=".mrc", filetypes=[("MARC files.", "*.mrc")])
+        
+        #relpath = "../../data/marc/"+str(name)+".mrc"
         #Note to self, I'm aware that certain characters are not allowed for file names, I don't know how this will handle it.
-        abspath = os.path.join(__file__, relpath)
-        with open(abspath, 'wb') as marc:
+        #abspath = os.path.join(__file__, relpath)
+        with open(name, 'wb') as marc:
 
             for row in readme:
                 #This iterates once for each row in the CSV
@@ -250,7 +273,7 @@ def readCSV(target):
             #For ends here
 
     print(f"debug\n{usePat}\n{fieldPat}\n{subfieldPat}\n")
-    print("If this prints, the file was successfully created at: "+str(os.path.relpath(abspath)))
+    print(f"If this prints, the file was successfully created at: {name}")
     print("Note: this program will not do the following:\n\nRecognize proper nouns.\nAdd indicators.\nDo almost any error checking.\n\nPlease verify the output!\n")
     """ OLD SOLUTION
                     match(fieldPat[i]):
@@ -301,30 +324,3 @@ def readCSV(target):
                         """
                     
 #End of function
-
-
-
-
-        
-        
-
-
-
-
-
-
-"""
-We can read from a list of files in a directory. If the user specifies a string for a filename, this can check to see if that file
-exists in a given directory, and can potentially ask them if they want to reconsider their choice. In this program, I don't think
-this will be used anywhere except for making .marc files, but might as well have the option to allow different dirnames.
-
-Args:
-filename -- the name of the file being created by the user.
-
-Return:
-True -- if the user wants to write to the thing or no existing file is found.
-False -- if an existing file is found and the user does not want to overwrite.
-"""
-def rusure(filename):
-
-    pass

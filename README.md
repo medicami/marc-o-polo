@@ -1,7 +1,7 @@
 # marc-o-polo
 A small project to convert Linux datafiles containing bilbiographic data into MaRC files or other usable formats.
 
-# I Don't Care About All This, How Do I Use the Program?
+## I Don't Care About All This, How Do I Use the Program?
 This is a Python program, so please install Python 3.
 
 You will also need pymarc. To install it, copy this into your terminal:
@@ -63,3 +63,11 @@ The plan right now would be to grab all of the ISBNs from a target file, then co
 
 After some time it turns out that it's pretty easy to compare two things. Not that I really should be surprised since nested loops were pretty much made for this sort of thing. As far as I know, with this feature done the program is effectively completed. Sure, there's a lot more that could be added or improved upon, especially the interface method, but for all I really care about, this is pretty much done. Shoutouts to ASCIIFlow which I used to make the joke.
 
+## PyInstaller
+Other than refactoring, which is not one of my interests right now, one thing that can be done to the program is to repackage it as a Windows .exe. The original goal was, after all, to make a program that can run on a Windows machine, which the ULS cataloguers use. PyInstaller can be used to achieve this goal: its installed similar to other modules, but, instead of giving us new code to run, PyInstaller is run through the terminal directly and creates an .exe file out of our .py files.
+
+When running PyInstaller, the command was "py -m PyInstaller --onefile .\main.py"
+
+Annoyingly, the name of PyInstaller is case sensitive and specific, which got me stuck for quite a while. Running PyInstaller is pretty simple otherwise, and gave me an .exe, but there's a problem. The new .exe crashes when running one of the operations, which isn't great for usability. Given that the program runs perfectly fine when run through both the terminal and VSC's terminal using the .py file, there's clearly some incompatibility with Windows and my first instinct is that its the filepaths.
+
+After some messing around it seems like the best solution was to obliterate my old solution and use something new: Tkinter. I was hesitant to try Tkinter because my attempts at using UI modules in Java ended with me being sour and angry, but mercifully I stumbled upon a solution that was simple and easy. By using Tkinter's filedialog and askopenfilename and asksaveasfilename methods, I can just ask the user for a file path and not have to worry about all of this relative and absolute pathing nonsense. This lops off a massive amount of code that I worked on, all because I didn't know about it. I also found out in doing this that you can simply test if a string is false or true to identify if its empty. So doing if(string): will execute if the string has anything in it.
