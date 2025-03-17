@@ -1,18 +1,10 @@
 # marc-o-polo
 A small project to convert Linux datafiles containing bilbiographic data into MaRC files or other usable formats.
 
-## I Don't Care About All This, How Do I Use the Program?
-This is a Python program, so please install Python 3.
+## HOW DO
+Windows users should be able to run the executable main.exe.
 
-You will also need pymarc. To install it, copy this into your terminal:
-
-py -m pip install pymarc
-
-To run through the terminal, simply type "py " and then the location of the "main.py" file. On Windows, you can drag the file from the file explorer into the terminal and it will print the path to the file for you, 
-
-e.g., "py C:\Stuff\marc-o-polo\src\main.py"
-
-An easy way to do this on Windows is to Shift+Right-Click in the empty space in the file explorer and select "Open Powershell window here", then you can start typing the name of the file to run, press tab, and it will automatically complete the relative path for the file.
+If you would like to run it through Python, install Python 3 and the module pymarc. You can do this by using the terminal command "py -m pip install pymarc". Then run the file by typing "py (path to main.py)". If your terminal is currently in the src folder, you can type "py .\main.py" or type "py " and drag the file into the terminal, which will get the absolute path (the path starting from C: or whereve) for you.
 
 ## The Problem
 When books are received, information about them comes in a datafile on a Linux server. The file itself is essentially unusable for the cataloguers and other staff, who typically do their work on Windows machines. In order to convert this information into a usable formate for the other staff to use, information for individual books is printed out onto receipts and placed inside of the items for future processing.
@@ -34,6 +26,7 @@ The practicality of this project hinges on whether or not any common programming
 
 Any actual code is to be here: https://github.com/medicami/marc-o-polo
 
+# The Ramblings of a Madman
 ## "Literature" Review
 Python is the language of choice for this project. The main reason being is that it's new and shiny and cool. On a more serious note, it is a relatively modern language with support for lots of additional functionality created by other people through modules. Python is more optimized than a language like Java, but a lot more intuitive and easy to learn compared to C++. It's also just different from what I learned with (Java), so this is a good learning opportunity.
 
@@ -71,3 +64,12 @@ When running PyInstaller, the command was "py -m PyInstaller --onefile .\main.py
 Annoyingly, the name of PyInstaller is case sensitive and specific, which got me stuck for quite a while. Running PyInstaller is pretty simple otherwise, and gave me an .exe, but there's a problem. The new .exe crashes when running one of the operations, which isn't great for usability. Given that the program runs perfectly fine when run through both the terminal and VSC's terminal using the .py file, there's clearly some incompatibility with Windows and my first instinct is that its the filepaths.
 
 After some messing around it seems like the best solution was to obliterate my old solution and use something new: Tkinter. I was hesitant to try Tkinter because my attempts at using UI modules in Java ended with me being sour and angry, but mercifully I stumbled upon a solution that was simple and easy. By using Tkinter's filedialog and askopenfilename and asksaveasfilename methods, I can just ask the user for a file path and not have to worry about all of this relative and absolute pathing nonsense. This lops off a massive amount of code that I worked on, all because I didn't know about it. I also found out in doing this that you can simply test if a string is false or true to identify if its empty. So doing if(string): will execute if the string has anything in it.
+
+## Conclusions
+There were a lot of solutions I came up with while developing this program that ended up being unecessary. One notable example was the menus. When you ask the user for an input using input(), what you get is a string. If you compare this using match case, just comparing a number will be comparing a string to an integer, which breaks things. I ended up developing a method that would validate the input after casting it into a string, which required a try if else combination. The much simpler solution was just to use strings in the match case, which captures numbers out of range and letters all in one. So that's fun.
+
+Programming can be fun, I think having an actual problem try and solve and not some kind of abstract goal helped give what I was doing some level of focus and purpose. The real issues come when you're trying to develop your solutions and you have no idea what to do. Unlike my creative ventures which are very intuitive and freeform, programming is a world where the solutions and answers are hyper specific and specialized. Moreover, it's difficult to learn and discover what possibilities are available to you when the world of code is helpfully yet overwhelmingly verbose and technical. Every step of this project was marred with confusion when I would need to use a new module or method. Although I have an understanding of *how* to code, I feel that I don't understand *why* some things are the way they are. There's a difference between import (module) and from (module) import (method). I won't doubt that there's a reason for this distinction, but there is no built in way for me to learn about this.
+
+Coders live on the internet. Despite our insistence that we all write documentation for eachother's sake, all of this information and instruction doesn't do anything for someone who doesn't know what they need. Getting into programming feels like getting into a secret club and after over two years of educational and personal experience with the subject, I still feel like an outsider when I read forum posts from people implying that something I've never seen before and never could have imagined possible is "a standard solution" or "what I should be doing". It's a difficult problem to address because while you teach the mentality and transferable concepts that apply to many programming languages, the tools themselves change and evolve constantly. And programming is a creative solution to a unique problem: everyone's use case will be different. Some people develop artificial intelligence, others develop websites, I developed a program to convert a very specific file format into another specific file format. How could you cost-effectively train each of these problem areas when each one is so different? In the end, the burden falls onto the programmer to not only create the solutions that work for them and their users, but to embark on a journey through the unknown to gain the knowledge needed to succeed. It sucks, but when there's no other way, the will to see a problem solved is enough for some to continue on this path toward the sado-masochistic sense of satisfaction seeing something run without a problem. At least on your machine.
+
+In the end, I deem the current state of the program a success. We got to stage 6 of my original plan, which is impressive for me given that I originally did not plan to include the comparison feature, but it turned out quite well. Will I continue working on this project in the future? I don't know, I have some other projects that I need to start learning how to do which will likely consume my life from the inside-out, in addition to potential work and hobbies. If such demand arises that I continue developing this solution, then I could be convinced, but for now I'd like to step back from this for the time being.

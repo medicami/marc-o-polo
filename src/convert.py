@@ -92,7 +92,7 @@ def getCSV():
 wtf I wish someone told me tkinter could do this AND do it this easily.
 """
 def coolerGetCSV():
-    print("Please chooes the CSV file you want to convert.")
+    print("Please choose the CSV file you want to convert.")
     target = askopenfilename(title="Please choose the CSV file you want to convert.", filetypes=[("CSV files", "*.csv")])
     #how was I supposed to know that strings work as booleans? Especially because doing target!=False DIDN'T WORK
     if (target):
@@ -193,7 +193,7 @@ def readCSV(target):
                         else:
                             subfieldPat.append(sub)
                             break
-                    clear(True)
+                    
                     
 
                 else:
@@ -201,14 +201,14 @@ def readCSV(target):
                     fieldPat.append(None)
                     subfieldPat.append(None)
                     pass
-                
+                clear(True)
                 #End of while
                 break
-
+            clear(False)
 
         #It's finally time to start using Pymarc. We have the rows and the patterns they will follow, so now we just have to make the records column by column.
         
-        
+        print("Please choose where you want to save the new MARC file.")
         name = asksaveasfilename(title="Please choose where to save the new MARC file.",defaultextension=".mrc", filetypes=[("MARC files.", "*.mrc")])
         
         #relpath = "../../data/marc/"+str(name)+".mrc"
@@ -273,6 +273,7 @@ def readCSV(target):
 
     print(f"If this prints, the file was successfully created at: {name}")
     print("Note: this program will not do the following:\n\nRecognize proper nouns.\nAdd indicators.\nDo almost any error checking.\n\nPlease verify the output!\n")
+    
     """ OLD SOLUTION
                     match(fieldPat[i]):
                         case 1:

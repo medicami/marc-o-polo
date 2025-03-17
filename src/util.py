@@ -3,6 +3,13 @@ import os
 This class contains functions used in the other classes.
 """
 
+def ver():
+    print(f"marc-o-polo")
+    version = "0.9 Beta Testing"
+    print(f"Program version: {version}.")
+    pass
+
+
 """
 Clears the screen after asking the user to press enter.
 """
@@ -86,12 +93,12 @@ def peck():
     peck = """
             PPPPPPPPPPP    EEEEEEEEEE      CCCCCCC   KK       KK
             PPP      PP    EE            CC          KK     KKK 
-            PPP      PPP   EE           C            KK   KKKK  
-            PPP       PP   EE          CC            KKKKKKK    
+            PPP      PPP   EE           C            KK   KKK   
+            PPP       PP   EE          CC            KK KKK     
             PPPPPPPPPPP    EEEEEEEEEE  C             KKKK       
             PP             EE          CC            KKKK       
-            PP             EE           CCC          KK KKKK    
-            PP             EE             CCCCC      KK    KKKK 
+            PP             EE           CCC          KK KKK     
+            PP             EE             CC         KK    KKK  
             PP             EEEEEEEEEE      CCCCCCCC  KK       KK
             """
     print(peck)

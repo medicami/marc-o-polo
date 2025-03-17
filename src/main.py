@@ -11,7 +11,7 @@ def main():
     window.attributes('-topmost', 1)
     window.withdraw()
     while True:
-        
+        ver()
         print(
             #it turns out when they said triple quotations were literal strings, they weren't kidding.
             """
@@ -23,18 +23,20 @@ def main():
             [3] GET ME OUT OF HERE
             """
         )
-        option = validate()
-
+        
+        #option = validate()
+        option = input("GIMME NUMBER: ")
         match option:
-            case 1:
+            case "1":
                 print("This is the conversion option.")
                 clear(False)
                 target = coolerGetCSV()
-                if target != None:
+                if target:
                     readCSV(target)
 
-                pass
-            case 2:
+                
+                clear(False)
+            case "2":
                 print("This is the comparison option.")
                 clear(False)
                 '''
@@ -47,22 +49,24 @@ def main():
                 targetMarc = askopenfilename(title="Please choose the MARC file you want to compare against (testing file).",filetypes=[("MARC files", "*.mrc")])
                 print("Please choose the master file (the one that matches will be copied from into a new file.)")
                 targetMaster = askopenfilename(title="Please choose the MARC file you want to compare using (master file).",filetypes=[("MARC files", "*.mrc")])
-
-                compare(targetMarc, targetMaster)
-
+                if targetMarc and targetMaster:
+                    compare(targetMarc, targetMaster)
+                clear(False)
                 pass
-            case 3:
+            case "3":
                 peck()
+                clear(False)
                 break
-            case 84:
+            case "84":
                 joke()
+                clear(False)
             case _:
                 pass
                 
                 
                 
 
-        clear()
+        clear(True)
         continue
 
 
