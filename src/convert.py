@@ -137,7 +137,7 @@ def readCSV(target):
                 case _:
                     clear(True)
                     continue
-            clear()
+            clear(False)
             break
         
 
@@ -204,10 +204,10 @@ def readCSV(target):
                 clear(True)
                 #End of while
                 break
-            clear(False)
+            clear(True)
 
         #It's finally time to start using Pymarc. We have the rows and the patterns they will follow, so now we just have to make the records column by column.
-        
+        clear(False)
         print("Please choose where you want to save the new MARC file.")
         name = asksaveasfilename(title="Please choose where to save the new MARC file.",defaultextension=".mrc", filetypes=[("MARC files.", "*.mrc")])
         
@@ -228,7 +228,7 @@ def readCSV(target):
                     #For some reason, this is an invalid escape sequence. But it still prints fine...
                     if usePat[i]==True:
 
-                        match fieldPat[i]:
+                        match str(fieldPat[i]):
                             case '100':
                                 #Main entry is title case
                                 v = v.title()

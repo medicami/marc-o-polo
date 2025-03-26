@@ -6,6 +6,9 @@ Windows users should be able to run the executable main.exe.
 
 If you would like to run it through Python, install Python 3 and the module pymarc. You can do this by using the terminal command "py -m pip install pymarc". Then run the file by typing "py (path to main.py)". If your terminal is currently in the src folder, you can type "py .\main.py" or type "py " and drag the file into the terminal, which will get the absolute path (the path starting from C: or whereve) for you.
 
+Most of the program is operated using the keyboard. When asked for a number, you are choosing an option on screen, so please engage your eyeballs and read.
+When picking files, instructions will be given on the task bar as well as in the terminal.
+
 ## The Problem
 When books are received, information about them comes in a datafile on a Linux server. The file itself is essentially unusable for the cataloguers and other staff, who typically do their work on Windows machines. In order to convert this information into a usable formate for the other staff to use, information for individual books is printed out onto receipts and placed inside of the items for future processing.
 
